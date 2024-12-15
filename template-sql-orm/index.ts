@@ -150,65 +150,6 @@ class QueryBuilder {
 	}
 }
 
-const query = () => {
+export const query = () => {
 	return new QueryBuilder()
 }
-
-
-const teachers = [
-	{
-		teacherId: '1',
-		teacherName: 'Peter'
-	},
-	{
-		teacherId: '2',
-		teacherName: 'Anna'
-	}
-];
-
-
-const students = [
-	{
-		studentName: 'Michael',
-		tutor: '1'
-	},
-	{
-		studentName: 'Rose',
-		tutor: '2'
-	}
-];
-
-function teacherJoin(join: any) {
-	return join[0].teacherId === join[1].tutor;
-}
-
-function student(join: any) {
-	return {
-		studentName: join[1].studentName,
-		teacherName: join[0].teacherName
-	};
-}
-
-// SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
-const query_1 = query().select(student).from(teachers, students).where(teacherJoin).execute()
-
-const numbers1 = [1, 2];
-const numbers2 = [4, 5];
-
-const query_2 = query().select().from(numbers1, numbers2).execute()
-
-function tutor1(join: any) {
-	return join[1].tutor === "1";
-}
-
-const query_3 = query().select(student).from(teachers, students).where(teacherJoin).where(tutor1).execute()
-const query_4 = query().select(student).where(teacherJoin).where(tutor1).from(teachers, students).execute()
-
-console.log('query_1')
-console.dir(query_1, { depth: null })
-console.log('query_2')
-console.dir(query_2, { depth: null })
-console.log('query_3')
-console.dir(query_3, { depth: null })
-console.log('query_4')
-console.dir(query_4, { depth: null })

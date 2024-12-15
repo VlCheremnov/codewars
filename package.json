@@ -4,15 +4,19 @@
   "description": "",
   "main": "sql.js",
   "scripts": {
-    "test:complete-the-pattern": "mocha --require ts-node/register '.\\complete-the-pattern\\test.ts'",
-    "test:decode-the-morse-code": "mocha --require ts-node/register '.\\decode-the-morse-code\\test.ts'",
-    "test:find-the-parity-outlier": "mocha --require ts-node/register '.\\find-the-parity-outlier\\test.ts'"
+    "test:complete-the-pattern": "mocha --require ts-node/esm '.\\complete-the-pattern\\test.ts'",
+    "test:decode-the-morse-code": "mocha --require ts-node/esm '.\\decode-the-morse-code\\test.ts'",
+    "test:find-the-parity-outlier": "mocha --require ts-node/esm '.\\find-the-parity-outlier\\test.ts'",
+    "test:template-sql-orm": "mocha --require ts-node/esm '.\\template-sql-orm\\test.ts'"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.2",
+    "chai": "^5.1.2",
+    "esm": "^3.2.25",
     "mocha": "^11.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
