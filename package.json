@@ -2,7 +2,6 @@
   "name": "codewars",
   "version": "1.0.0",
   "description": "",
-  "main": "sql.js",
   "scripts": {
     "test:complete-the-pattern": "mocha --require ts-node/esm '.\\complete-the-pattern\\test.ts'",
     "test:decode-the-morse-code": "mocha --require ts-node/esm '.\\decode-the-morse-code\\test.ts'",
