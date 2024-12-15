@@ -4,13 +4,16 @@
   "description": "",
   "main": "sql.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:complete-the-pattern": "mocha --require ts-node/register '.\\complete-the-pattern\\test.ts'",
+    "test:decode-the-morse-code": "mocha --require ts-node/register '.\\decode-the-morse-code\\test.ts'",
+    "test:find-the-parity-outlier": "mocha --require ts-node/register '.\\find-the-parity-outlier\\test.ts'"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.2",
+    "mocha": "^11.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }
