@@ -8,7 +8,7 @@ class QueryBuilder {
 	private groupByFn?: FunctionType[]
 	private orderByFn?: FunctionType
 
-	private fromArrays?: any[][]
+	private documents?: any[][]
 
 	/* Выбор поля */
 	select (fn?: FunctionType) {
@@ -24,11 +24,30 @@ class QueryBuilder {
 	}
 	/* Массив данных */
 	from (...arrays: any[][]) {
-		if (this.fromArrays) {
+		if (this.documents) {
 			throw new Error('Duplicate FROM')
 		}
 
-		this.fromArrays = arrays
+		if (arrays.length === 1) {
+			this.documents = JSON.parse(JSON.stringify(arrays[0]))
+		} else {
+			this.documents = []
+
+			for (let i = 0; i < arrays.length; i++) {
+				const array_documents = arrays[i]
+
+				array_documents.forEach((document) => {
+					for (let j = i + 1; j < arrays.length; j++) {
+						const next_array_documents = arrays[j]
+						next_array_documents.forEach((next_document) => {
+							if (this.documents) {
+								this.documents.push([document, next_document])
+							}
+						})
+					}
+				})
+			}
+		}
 
 		return this
 	}
@@ -61,29 +80,29 @@ class QueryBuilder {
 	}
 
 	groupDocuments (documents: any[], groupByFn: FunctionType[], i: number = 0) {
-		const mapDocuments: { [key: string]: any } = {}
+		const mapDocuments: Map<string | number, any> = new Map()
 
 		const fn = groupByFn[i]
 
 		documents.forEach((document: any) => {
 			const group = fn(document)
 
-			if (!mapDocuments[group]) {
-				mapDocuments[group] = []
+			if (!mapDocuments.has(group)) {
+				mapDocuments.set(group, [])
 			}
 
-			mapDocuments[group].push(document)
+			mapDocuments.get(group).push(document)
 		})
 
 		if (groupByFn.length > i + 1) {
 			i++
 
-			Object.keys(mapDocuments).forEach((key: string) => {
-				mapDocuments[key] = this.groupDocuments(mapDocuments[key], groupByFn, i)
+			Array.from(mapDocuments.keys()).forEach((key) => {
+				mapDocuments.set(key, this.groupDocuments(mapDocuments.get(key), groupByFn, i))
 			})
 		}
 
-		return Object.entries(mapDocuments)
+		return Array.from(mapDocuments.entries())
 	}
 
 	/* Выборка на группу */
@@ -93,31 +112,11 @@ class QueryBuilder {
 	}
 	execute () {
 
-		if (!this.fromArrays?.length) {
+		if (!this.documents?.length) {
 			return []
 		}
 
-		let documents: any[] = []
-
-		if (this.fromArrays.length === 1) {
-			documents = JSON.parse(JSON.stringify(this.fromArrays[0]))
-		} else {
-			const fromArrays = this.fromArrays
-
-			for (let i = 0; i < fromArrays.length; i++) {
-				const array_documents = fromArrays[i]
-
-
-				array_documents.forEach((document) => {
-					for (let j = i + 1; j < fromArrays.length; j++) {
-						const next_array_documents = fromArrays[j]
-						next_array_documents.forEach((next_document) => {
-							documents.push([document, next_document])
-						})
-					}
-				})
-			}
-		}
+		let documents: any[] = this.documents
 
 
 		if (this.whereFn?.length) {

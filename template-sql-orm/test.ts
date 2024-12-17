@@ -1,6 +1,6 @@
 import {
 	query
-} from './index.js';
+} from './index';
 import assert from "assert";
 
 describe("SQL tests", function() {
